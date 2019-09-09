@@ -1,5 +1,6 @@
 """
-This module handles the download of molecules from the ZINC database
+This module handles the download of molecules from the ZINC database.
+A list of ZINC URLS accessing the database is available in the file ZINC-downloader-2D-txt.uri
 
 Author: Rodolfo Marques
 """
