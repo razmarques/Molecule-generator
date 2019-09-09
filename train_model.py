@@ -1,5 +1,5 @@
 """
-Script file used to train the Dynamic CNN model to a database of SMILES
+Script file used to train the Deep Neural Network model to a database of SMILES
 """
 
 import numpy as np
