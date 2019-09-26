@@ -35,7 +35,7 @@ def build_data_frame(tranche_ids_set):
     data = []
 
     for tranche_id in tranche_ids_set:
-        tranche_id_list = zd.get_tranche_id_data(tranche_id, save_file=False) # the second argument is hardcoded here. Not a good implementation!!!
+        tranche_id_list = zd.get_tranche_id_data(tranche_id, save_file=True)
 
         if len(header) == 0:
             header = tranche_id_list[0].strip().split("\t")
@@ -52,21 +52,27 @@ def build_data_frame(tranche_ids_set):
 
 
 def build_smiles_dictionary(zinc_df):
-    # TODO: this method counts the characters on the SMILES database. Implement a more efficient code by determining
-    # in advance the number of SMILES characters allowed instead of counting them.
     # TODO: improve dictionary to include chemical element strings with size 2 (e.g. Cl, Br)
 
     character_set = set()
     character_dict = {}
 
+    # Create a set of all individual SMILES characters
     for smiles in zinc_df["smiles"]:
 
         for char in smiles:
             character_set.add(char)
 
+    # Build a dictionary with SMILES characters with an index value each
     count = 1
     for unique_char in character_set:
         character_dict[unique_char] = count
+
+        # Add the reversed key:value pair to the dictionary. This way the dictionary can both be used to get the index
+        # from  a SMILES character or the SMILES character from an index
+        character_dict[count] = unique_char
+
+        # iterate count
         count += 1
 
     return character_dict

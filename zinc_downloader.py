@@ -36,34 +36,30 @@ def download_tranche_data(tranche_id):
     if tranche_urls.get(tranche_id) is None:
         print("Incorrect tranche ID")
     else:
-
         url = tranche_urls[tranche_id]
         url_req = requests.get(url)
         return url_req.text
 
 
-def get_tranche_id_data(tranche_id, zinc_files_dir="./zinc_data", save_file=True):
+def get_tranche_id_data(tranche_id, save_file=True):
 
-    if zinc_files_dir[-1] == "/":
-        full_path = zinc_files_dir + tranche_id + ".dat"
+    # Set up directory for zinc files
+    zinc_files_dir = "./zinc_data/"
+    if not os.path.isdir(zinc_files_dir):
+        os.mkdir(zinc_files_dir)
+    zinc_file = zinc_files_dir + tranche_id + ".dat"
+
+    # Check if tranche id zinc file is in zinc_files_dir
+    if os.path.isfile(zinc_file):
+        with open(zinc_file, "r") as file:
+            content = file.read()
     else:
-        full_path = zinc_files_dir + "/" + tranche_id + ".dat"
-
-    # Create ZINC files storage folder
-    if os.path.isdir(zinc_files_dir):
-
-        if os.path.isfile(full_path):
-            with open(full_path, "r") as file:
-                content = file.read()
-        else:
-            urls_list = build_url_dict()
-            content = download_tranche_data(tranche_id)
-    else:
-        os.makedirs(zinc_files_dir)
+        urls_list = build_url_dict()
+        content = download_tranche_data(tranche_id)
 
     # Save file if save flag is enabled
     if save_file:
-        with open(full_path, "w") as zinc_file:
+        with open(zinc_file, "w") as zinc_file:
             zinc_file.write(content)
 
     return content.strip().split("\n")

@@ -5,15 +5,6 @@ Utility functions for the implementation of Neural Network architectures
 import numpy as np
 
 
-def softmax(x):
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=0)
-
-
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-
 def clip(gradients, maxValue):
     """
     Clips gradients between minimum and maximum
@@ -26,3 +17,16 @@ def clip(gradients, maxValue):
     gradients = {"dWaa": dWaa, "dWax": dWax, "dWya": dWya, "db": db, "dby": dby}
 
     return gradients
+
+
+def loss(y_hat, y):
+    return -np.sum(y * np.log(y_hat))
+
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=0)
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))

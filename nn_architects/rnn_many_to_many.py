@@ -5,7 +5,7 @@ NOTE: the activation function implemented here is the hyperbolic tangent.
 """
 
 import numpy as np
-import nn_utils as utils
+from nn_architects import utilities as utils
 
 
 def rnn_cell_forward(xt, a_prev, parameters):
@@ -201,28 +201,3 @@ def rnn_backpropagation(da, cache):
     gradients = {"dx": dx, "da0": da0, "dWax": dWax, "dWaa": dWaa, "dba": dba}
 
     return gradients
-
-
-# TESTS
-if __name__ == "__main__":
-    np.random.seed(1)
-    n_x = 5
-    m = 10
-    n_a = 8
-    n_y = 4
-
-    xt = np.random.randn(n_x, m)
-    a_prev = np.random.randn(n_a, m)
-    pars = {
-        "Wax": np.random.randn(n_a, n_x),
-        "Waa": np.random.randn(n_a, n_a),
-        "Wya": np.random.randn(n_y, n_a),
-        "ba": np.random.randn(n_a, 1),
-        "by": np.random.randn(n_y, 1)
-    }
-
-    a, y_pred, cache = rnn_cell_forward(xt, a_prev, pars)
-    print(y_pred)
-    print(a.shape)
-    print(y_pred.shape)
-    print(cache.__len__())
