@@ -49,7 +49,7 @@ def rnn_cell_forward(xt, a_prev, parameters):
 
 def rnn_forward(x, a0, parameters):
     """
-    Implement the forward propagation of the recurrent neural network described in Figure (3).
+    Implement the forward propagation of the recurrent neural network.
 
     Arguments:
     x -- Input data for every time-step, of shape (n_x, m, T_x).

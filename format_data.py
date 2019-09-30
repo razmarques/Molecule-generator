@@ -51,11 +51,13 @@ def build_data_frame(tranche_ids_set):
     return pd.DataFrame(data, columns=header)
 
 
-def build_smiles_dictionary(zinc_df):
-    # TODO: improve dictionary to include chemical element strings with size 2 (e.g. Cl, Br)
+def build_smiles_dictionary(zinc_df, eos_token):
+    # NOTE: dictionary can be improved by defining all character sets in advance
 
     character_set = set()
-    character_dict = {}
+
+    # Initialize character index dictionary with EOS token
+    character_dict = {0: eos_token, eos_token: 0}
 
     # Create a set of all individual SMILES characters
     for smiles in zinc_df["smiles"]:

@@ -20,7 +20,8 @@ def clip(gradients, maxValue):
 
 
 def loss(y_hat, y):
-    return -np.sum(y * np.log(y_hat))
+
+    pass
 
 
 def softmax(x):

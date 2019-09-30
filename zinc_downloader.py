@@ -44,7 +44,7 @@ def download_tranche_data(tranche_id):
 def get_tranche_id_data(tranche_id, save_file=True):
 
     # Set up directory for zinc files
-    zinc_files_dir = "./zinc_data/"
+    zinc_files_dir = "./data/zinc_files/"
     if not os.path.isdir(zinc_files_dir):
         os.mkdir(zinc_files_dir)
     zinc_file = zinc_files_dir + tranche_id + ".dat"
