@@ -20,7 +20,7 @@ def clip(gradients, maxValue):
 
 
 def loss(y_hat, y):
-
+    # TODO
     pass
 
 
