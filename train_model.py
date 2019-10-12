@@ -15,11 +15,3 @@ smi_dict = formd.build_smiles_dictionary(smiles_df, eos_token="\n")
 
 # Build input data array
 X, Y = formd.build_input_data(smiles_df, smi_dict)
-
-# Create configuration dictionary for the model
-model_configs = {
-    "n_inputs": X.shape[0],
-    "n_examples": X.shape[1],
-    "Tx_max": X.shape[2],
-    "n_hidden": 64
-}
