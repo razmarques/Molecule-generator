@@ -8,7 +8,7 @@ import numpy as np
 from nn_architects import utilities as utils
 
 
-def rnn_cell_forward(xt, a_prev, parameters):
+def cell_forward_propagation(xt, a_prev, parameters):
     """
     This function implements the computation of the forward pass for a single RNN cell
 
@@ -47,7 +47,7 @@ def rnn_cell_forward(xt, a_prev, parameters):
     return a_next, yt_pred, cell_cache
 
 
-def rnn_forward(x, a0, parameters):
+def forward_propagation(x, a0, parameters):
     """
     Implement the forward propagation of the recurrent neural network.
 
@@ -82,7 +82,7 @@ def rnn_forward(x, a0, parameters):
     # Loop over all time-steps
     for t in range(T_x):
         # compute the state of the current RNN cell
-        a_next, yt_pred, cell_cache = rnn_cell_forward(x[:,:,t], a_next, parameters)
+        a_next, yt_pred, cell_cache = cell_forward_propagation(x[:,:,t], a_next, parameters)
 
         # update the hidden state value for the current time-step
         a[:, :, t] = a_next
@@ -99,7 +99,7 @@ def rnn_forward(x, a0, parameters):
     return a, y_pred, cache
 
 
-def rnn_cell_backpropagation(da_next, cell_cache):
+def cell_backpropagation(da_next, cell_cache):
     """
     Implements the backward pass for the RNN-cell (single time-step).
 
@@ -147,7 +147,7 @@ def rnn_cell_backpropagation(da_next, cell_cache):
 
     return gradients
 
-def rnn_backpropagation(da, cache):
+def backpropagation(da, cache):
     """
     Implementation of the backward pass for a RNN over an entire sequence of input data.
 
@@ -184,7 +184,7 @@ def rnn_backpropagation(da, cache):
     # Loop over all time-steps
     for t in reversed((range(T_x))):
         # Compute gradients for time step t
-        gradients = rnn_cell_backpropagation(da[:, :, t] + da_prev_t, cache_t[t])
+        gradients = cell_backpropagation(da[:, :, t] + da_prev_t, cache_t[t])
         dxt, da_prev_t, dWaxt, dWaat, dbat = gradients["dxt"], gradients["da_prev"], gradients["dWax"], \
                                             gradients["dWaa"], gradients["dba"]
 

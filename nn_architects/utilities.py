@@ -19,9 +19,29 @@ def clip(gradients, maxValue):
     return gradients
 
 
-def loss(y_hat, y):
-    # TODO
-    pass
+def loss_function(y_hat, y):
+    """
+     Computes the cross-entropy loss function for the SoftMax layer
+     Arguments:
+         y_hat -- Tensor of output predictions (n_y, m, T_x)
+         y -- Tensor of output labels (n_y, m, T_x)
+     Returns:
+         loss -- array of loss function values for each time-step
+    """
+
+    m = y_hat.shape[1]
+    T_x = y_hat.shape[2]
+
+    # Initialize loss array
+    loss = np.zeros((1, T_x))
+
+    for t in range(T_x):
+        yt_hat = y_hat[:, :, t]
+        yt = y[:, :, t]
+
+        loss[t] = (1/m)*np.sum(- np.sum(yt*np.log(yt_hat), axis=0))
+
+    return loss
 
 
 def softmax(x):

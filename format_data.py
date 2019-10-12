@@ -5,6 +5,7 @@ This module processes molecular database and formats it to be used in machine le
 import random
 import zinc_downloader as zd
 import pandas as pd
+import numpy as np
 
 
 def get_random_tranche_id():
@@ -29,6 +30,42 @@ def sample_n_ids(n):
     return list(ids_set)
 
 
+def build_input_data(smiles_df, characters_dict):
+
+    eos_token = characters_dict[0]
+    n_x = int(characters_dict.__len__() / 2)
+    m = smiles_df.shape[0]
+    Tx_max = max([len(ch) for ch in smiles_df["smiles"]]) + 1 # added one unit to accommodate the EOS token
+
+    # Print data statistics
+    print("Number of training examples: {0}".format(m))
+    print("Number of SMILES characters: {0}".format(n_x))
+    print("Maximum SMILES length: {0}".format(Tx_max))
+
+    # Initialize data array
+    X = np.zeros((n_x, m, Tx_max))
+    Y = np.zeros((n_x, m, Tx_max)) # the Y matrix is the data in X shifted on time-step further since we want the RNN to predict the next character in the sequence.
+
+    # Fill X with one-hot vectors for each SMILES training example
+    # NOTE: the x one-hot vector for the first time-step is set to the zero.
+    for iex in range(m):
+        # Extract and canonize the ith SMILES
+        smi = smiles_df.loc[iex, "smiles"]
+        # smi = Chem.CanonSmiles(smiles_df.loc[iex, "smiles"] + eos_token) # This takes too long. Disabled for the time being
+
+        for t in range(len(smi)):
+            ichar = characters_dict[smi[t]]
+            X[ichar, iex, t+1] = 1
+            Y[ichar, iex, t] = 1
+
+            # If this is the last character, add the EOS character to t+1
+            if t == len(smi):
+                ieos = characters_dict[eos_token]
+                Y[ieos, iex, t+1] = 1
+
+    return X, Y
+
+
 def build_data_frame(tranche_ids_set):
 
     header = []
@@ -45,8 +82,6 @@ def build_data_frame(tranche_ids_set):
                 continue
             else:
                 data.append(line.strip().split("\t"))
-
-    print("Finished building DataFrame!")
 
     return pd.DataFrame(data, columns=header)
 

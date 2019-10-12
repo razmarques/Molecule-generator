@@ -3,8 +3,7 @@ Script file used to train an RNN architecture to learn and predict molecular str
 """
 
 import format_data as formd
-import model
-
+from nn_architects import utilities as utils
 
 # Load database
 tranche_id_list = ["AAAA"]
@@ -15,11 +14,12 @@ smiles_df = formd.build_data_frame(tranche_id_list) # join all SMILES in a singl
 smi_dict = formd.build_smiles_dictionary(smiles_df, eos_token="\n")
 
 # Build input data array
-X, Y = model.build_input_data(smiles_df, smi_dict)
+X, Y = formd.build_input_data(smiles_df, smi_dict)
 
-# Run training algorithm
-n_hidden = 64
-learning_rate = 0.01
-niter = 2000
-
-# loss, gradients = model.optimize(X, Y, n_hidden, learning_rate, niter)
+# Create configuration dictionary for the model
+model_configs = {
+    "n_inputs": X.shape[0],
+    "n_examples": X.shape[1],
+    "Tx_max": X.shape[2],
+    "n_hidden": 64
+}
